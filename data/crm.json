@@ -1,0 +1,33 @@
+[
+  {
+    "task_id": "crm_01",
+    "instruction": "Set client #104 status to INACTIVE and add a system note 'Pending invoice payout'.",
+    "initial_state": {
+      "clients": [
+        {"id": 104, "name": "Vanderbilt Math Dept", "status": "ACTIVE", "notes": ""},
+        {"id": 105, "name": "VU-BEAM Lab", "status": "ACTIVE", "notes": "Ultrasound research partner"}
+      ]
+    },
+    "target_state": {
+      "clients": [
+        {"id": 104, "name": "Vanderbilt Math Dept", "status": "INACTIVE", "notes": "Pending invoice payout"},
+        {"id": 105, "name": "VU-BEAM Lab", "status": "ACTIVE", "notes": "Ultrasound research partner"}
+      ]
+    }
+  },
+  {
+    "task_id": "crm_02",
+    "instruction": "Create a new client profile for 'Antigravity Robotics' with status ACTIVE and notes 'Robotics data collection partner'.",
+    "initial_state": {
+      "clients": [
+        {"id": 104, "name": "Vanderbilt Math Dept", "status": "INACTIVE", "notes": "Pending invoice payout"}
+      ]
+    },
+    "target_state": {
+      "clients": [
+        {"id": 104, "name": "Vanderbilt Math Dept", "status": "INACTIVE", "notes": "Pending invoice payout"},
+        {"id": 106, "name": "Antigravity Robotics", "status": "ACTIVE", "notes": "Robotics data collection partner"}
+      ]
+    }
+  }
+]

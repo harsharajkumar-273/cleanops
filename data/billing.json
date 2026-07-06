@@ -1,0 +1,18 @@
+[
+  {
+    "task_id": "bill_01",
+    "instruction": "Void invoice INV-402 and set total due amount to 0.",
+    "initial_state": {
+      "invoices": [
+        {"invoice_number": "INV-401", "client_id": 104, "amount": 1500.0, "status": "PAID"},
+        {"invoice_number": "INV-402", "client_id": 105, "amount": 850.0, "status": "PENDING"}
+      ]
+    },
+    "target_state": {
+      "invoices": [
+        {"invoice_number": "INV-401", "client_id": 104, "amount": 1500.0, "status": "PAID"},
+        {"invoice_number": "INV-402", "client_id": 105, "amount": 0.0, "status": "VOID"}
+      ]
+    }
+  }
+]

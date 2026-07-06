@@ -1,0 +1,18 @@
+[
+  {
+    "task_id": "order_01",
+    "instruction": "Fulfill order ORD-801: decrement stock by 2 and set order status to SHIPPED.",
+    "initial_state": {
+      "stock": {"item_id": 99, "name": "Vision Sensor V2", "quantity": 10},
+      "orders": [
+        {"order_id": "ORD-801", "item_id": 99, "quantity": 2, "status": "PENDING"}
+      ]
+    },
+    "target_state": {
+      "stock": {"item_id": 99, "name": "Vision Sensor V2", "quantity": 8},
+      "orders": [
+        {"order_id": "ORD-801", "item_id": 99, "quantity": 2, "status": "SHIPPED"}
+      ]
+    }
+  }
+]
