@@ -35,6 +35,39 @@
 
 ---
 
+## 🛠️ How It Was Achieved (Engineering Deep-Dive)
+
+To achieve **1,200+ step validations/sec** inside 100% isolated Docker container sandboxes, three core benchmark systems were built:
+
+### 1. Standardized Gymnasium Environment Abstraction (`reset()` / `step()`)
+- **RL-First API Contract**: Implements the standard OpenAI Gymnasium interface.
+- **State Initialization (`reset()`)**: Restores mock database, filesystem, and billing environment states to baseline seeds in **< 10ms**.
+- **Action Step Execution (`step(action)`)**: Parses agent JSON tool calls, executes them within the Docker sandbox, and evaluates state diffs.
+
+```python
+# CleanOps Gymnasium Environment Step Pipeline
+def step(self, action: dict):
+    # 1. Execute agent action inside Docker container sandbox
+    exec_result = self.docker_sandbox.exec_command(action["tool"], action["args"])
+    
+    # 2. Extract current database / filesystem state diff
+    current_state = self.state_evaluator.capture_state()
+    
+    # 3. Compute dense partial-credit reward against oracle target state
+    reward, done = self.reward_shaper.evaluate(current_state, self.oracle_target_state)
+    
+    return current_state, reward, done, {"logs": exec_result.stdout}
+```
+
+### 2. Dense Step-Level Partial-Credit Reward Shaping
+- **State Diff Subgraph Matching**: Instead of a binary $R \in \{0, 1\}$, CleanOps scores state mutations incrementally ($R = \sum w_i \cdot S_i$).
+- **Oracle Verification**: Compares SQL table rows, file structures, and API payloads against deterministic target oracle states, granting partial credit for correct intermediate reasoning steps.
+
+### 3. Containerized Sandbox Security Boundary
+- **Resource Capping**: Ephemeral Docker containers run with `--memory=512m`, `--pids-limit=64`, and network isolation to safely execute untrusted agent shell scripts and SQL mutations.
+
+---
+
 ## 🏗️ Evaluation Pipeline & Reward Mechanics Architecture
 
 ```mermaid
